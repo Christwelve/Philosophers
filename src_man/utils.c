@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 14:52:51 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/13 15:23:14 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/13 17:32:45 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ static long	ft_atol(const char *str)
 	i = 0;
 	output = 0;
 	sign = 1;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v'
-		|| str[i] == '\f' || str[i] == '\n' || str[i] == '\r')
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
@@ -61,5 +60,3 @@ int	is_num(char *argv)
 	}
 	return (0);
 }
-
-

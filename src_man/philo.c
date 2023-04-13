@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:09 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/13 16:31:41 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/13 17:33:18 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,5 @@ int	main(int argc, char **argv)
 {
 	if (check_input(argc, argv))
 		return (printf("%s\n", RED "Invalid input!" CLEAR), 1);
-
 	return (0);
 }
