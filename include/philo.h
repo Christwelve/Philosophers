@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/13 15:16:24 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/13 16:31:15 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <unistd.h>
 # include <limits.h>
 
+# define RED "\033[0;31m"
+# define CLEAR "\033[0m"
 
 typedef struct s_data
 {
