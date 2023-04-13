@@ -5,7 +5,7 @@ CC			= 	cc
 RM			=	rm -rf
 INCLUDE 	= 	-I include
 
-MAN_FILES	=	src_man/philo.c
+MAN_FILES	=	src_man/philo.c src_man/utils.c
 # BONUS_FILES	=	src_bonus/philo_bonus.c
 
 MAN_OBJ		=	$(MAN_FILES:.c=.o)
@@ -38,16 +38,14 @@ $(PHILO): $(MAN_OBJ)
 # bonus: $(PHILO_BONUS)
 
 # Philo_Bonus
-# $(RM) $(MAN_OBJ)
+# $(RM) $(BONUS_OBJ)
 
 clean:
 	$(RM) $(MAN_OBJ)
-	make clean --silent -C libs
 	@echo "$(BLUE)*** Object files Philo cleaned! ***$(WHITE)"
 
 fclean: clean
 	$(RM) $(PHILO)
-	make fclean --silent -C libs
 	@echo "$(BLUE)*** Executable Philo cleaned! ***$(WHITE)"
 
 re: fclean all
