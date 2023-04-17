@@ -6,13 +6,13 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 14:52:51 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/13 17:32:45 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/17 17:59:36 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static long	ft_atol(const char *str)
+long	ft_atol(const char *str)
 {
 	int		i;
 	long	output;

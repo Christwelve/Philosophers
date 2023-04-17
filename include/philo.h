@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/13 17:33:35 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/17 17:59:46 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,26 @@
 # define RED "\033[0;31m"
 # define CLEAR "\033[0m"
 
-typedef struct s_data
-{
-	unsigned int	nbr_philos;
-	unsigned int	t_die;
-	unsigned int	t_eat;
-	unsigned int	t_sleep;
-	unsigned int	nbr_must_eat;
-
-}	t_data;
-
 typedef struct s_philo
 {
 	unsigned int	id;
-	t_data			*data;
+	unsigned int	count_eat;
+	pthread_t		thread;
+	pthread_mutex_t	fork;
 
 }	t_philo;
+
+typedef struct s_data
+{
+	unsigned int	nbr_philos;
+	unsigned int	nbr_must_eat;
+	unsigned int	t_to_die;
+	unsigned int	t_to_eat;
+	unsigned int	t_to_sleep;
+	pthread_mutex_t	eating;
+	t_philo			*philo;
+
+}	t_data;
 
 /*
   ┌─────────────────────────────────────────────────────────────────────────┐
@@ -48,5 +52,6 @@ typedef struct s_philo
 
 int		is_num(char *argv);
 int		int_max(char *argv);
+long	ft_atol(const char *str);
 
 #endif
