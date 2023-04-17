@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:09 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/17 19:29:18 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/17 19:41:52 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,13 @@ int	main(int argc, char **argv)
 	if (create_threads(&data))
 		return (printf("%s\n", RED "Creating threads failed!" CLEAR), 4);
 
+	// pthread_join();
 	// printf("th_id:		%i\n", (int)data.philo->thread);
 	// printf("nbr_philos:	%i\n", (int)data.nbr_philos);
 	// printf("%i\n", data.t_to_die);
 	// printf("%i\n", data.t_to_eat);
 	// printf("%i\n", data.t_to_sleep);
 	// printf("%i\n", param.nbr_must_eat);
+	free(data.philo);
 	return (0);
 }
