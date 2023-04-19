@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/17 17:59:46 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/19 15:21:06 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,24 @@
 # define RED "\033[0;31m"
 # define CLEAR "\033[0m"
 
+# define FORK	0
+# define EAT	1
+# define SLEEP	2
+# define THINK	3
+# define DEATH	4
+# define EATEN	5
+
+typedef struct s_data	t_data;
+
 typedef struct s_philo
 {
 	unsigned int	id;
 	unsigned int	count_eat;
+	unsigned int	t_last_eat;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
+	pthread_mutex_t	*l_fork;
+	t_data			*data;
 
 }	t_philo;
 
@@ -39,7 +51,8 @@ typedef struct s_data
 	unsigned int	t_to_die;
 	unsigned int	t_to_eat;
 	unsigned int	t_to_sleep;
-	pthread_mutex_t	eating;
+	unsigned long	t_start;
+	// pthread_mutex_t	eating;
 	t_philo			*philo;
 
 }	t_data;
