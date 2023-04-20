@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/19 15:21:06 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/20 09:45:56 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ typedef struct s_data
   └─────────────────────────────────────────────────────────────────────────┘
  */
 
-int		is_num(char *argv);
-int		int_max(char *argv);
 long	ft_atol(const char *str);
+int		check_input(int argc, char **argv);
+
+unsigned long	get_time(void);
+void	print(int in, t_philo *philo);
 
 #endif

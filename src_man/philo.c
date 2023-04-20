@@ -6,41 +6,11 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:09 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/19 15:22:59 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/20 09:47:04 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-unsigned long	get_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	// return ((time.tv_sec % 1000) * 1000 + (time.tv_usec / 1000)); //unsigned int v.
-	return ((time.tv_sec * 1000) + time.tv_usec / 1000);
-}
-
-void	print(int in, t_philo *philo)
-{
-	if (in == FORK)
-		printf("%lu	Philo %u has taken a fork\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == EAT)
-		printf("%lu	Philo %u has eaten\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == SLEEP)
-		printf("%lu	Philo %u is sleeping\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == THINK)
-		printf("%lu	Philo %u is thinking\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == DEATH)
-		printf("%lu	Philo %u died\n",
-			(get_time() - philo->data->t_start), philo->id);
-
-
-}
 
 void	*philo_loop(void *arg)
 {
@@ -69,6 +39,20 @@ void	*philo_loop(void *arg)
 		print(THINK, philo);
 	}
 	return (NULL);
+}
+
+int	join_threads(t_data *data)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < data->nbr_philos)
+	{
+		if (pthread_join(&data->philo->thread[i], NULL))
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 int	create_threads(t_data *data)
@@ -125,18 +109,6 @@ int	set_data(int argc, char **argv, t_data *data)
 	return (0);
 }
 
-int	check_input(int argc, char **argv)
-{
-	if (argc < 5 || argc > 6)
-		return (1);
-	while (*(++argv) != NULL)
-	{
-		if (is_num(*argv) || int_max(*argv))
-			return (1);
-	}
-	return (0);
-}
-
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -149,8 +121,9 @@ int	main(int argc, char **argv)
 		return (printf("%s\n", RED "Setup philo failed!" CLEAR), 3);
 	if (create_threads(&data))
 		return (printf("%s\n", RED "Creating threads failed!" CLEAR), 4);
+	if (join_threads(&data))
+		return (printf("%s\n", RED "Joining threads failed!" CLEAR), 4);
 
-	// pthread_join();
 	// printf("th_id:		%i\n", (int)data.philo->thread);
 	// printf("nbr_philos:	%i\n", (int)data.nbr_philos);
 	// printf("%i\n", data.t_to_die);
