@@ -6,11 +6,23 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:09 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/20 09:47:04 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/21 11:21:44 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+int	is_philo_dead(t_data *data)
+{
+	if (((unsigned int)(get_time - data->philo->t_last_eat)) > data->t_to_die)
+		return (1);
+	return (0);
+}
+
+// int	survival_monitor()
+// {
+
+// }
 
 void	*philo_loop(void *arg)
 {
@@ -20,7 +32,7 @@ void	*philo_loop(void *arg)
 	if (philo->id % 2 == 0)
 	{
 		print(THINK, philo);
-		usleep(5000);
+		msleep(5);
 	}
 	while (1)
 	{
@@ -84,10 +96,11 @@ int	set_philo(t_data *data)
 		data->philo[i].count_eat = 0;
 		data->philo[i].thread = 0;
 		data->philo[i].data = data;
-		if (i > 0)
-			data->philo[i].l_fork = &data->philo[i - 1].fork;
+		data->philo[i].dead = 0;
 		if (pthread_mutex_init(&data->philo->fork, NULL))
 			return (1);
+		if (i > 0)
+			data->philo[i].l_fork = &data->philo[i - 1].fork;
 		i++;
 	}
 	data->philo[0].l_fork = &data->philo[i].fork;
@@ -122,17 +135,7 @@ int	main(int argc, char **argv)
 	if (create_threads(&data))
 		return (printf("%s\n", RED "Creating threads failed!" CLEAR), 4);
 	if (join_threads(&data))
-		return (printf("%s\n", RED "Joining threads failed!" CLEAR), 4);
-
-	// printf("th_id:		%i\n", (int)data.philo->thread);
-	// printf("nbr_philos:	%i\n", (int)data.nbr_philos);
-	// printf("%i\n", data.t_to_die);
-	// printf("%i\n", data.t_to_eat);
-	// printf("%i\n", data.t_to_sleep);
-	// printf("%i\n", param.nbr_must_eat);
-	// sleep(2);
-	// printf("test: %i\n", get_time());
-	// printf("diff: %i\n", get_time() - data.t_start);
+		return (printf("%s\n", RED "Joining threads failed!" CLEAR), 5);
 
 	free(data.philo);
 	return (0);

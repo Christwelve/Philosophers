@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/20 09:45:56 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/21 11:22:51 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ typedef struct s_data	t_data;
 typedef struct s_philo
 {
 	unsigned int	id;
+	unsigned int	dead;
 	unsigned int	count_eat;
-	unsigned int	t_last_eat;
+	unsigned long	t_last_eat;
 	pthread_t		thread;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*l_fork;
@@ -63,10 +64,11 @@ typedef struct s_data
   └─────────────────────────────────────────────────────────────────────────┘
  */
 
-long	ft_atol(const char *str);
-int		check_input(int argc, char **argv);
+long			ft_atol(const char *str);
+int				check_input(int argc, char **argv);
 
 unsigned long	get_time(void);
-void	print(int in, t_philo *philo);
+void			msleep(int ms);
+void			print(int in, t_philo *philo);
 
 #endif

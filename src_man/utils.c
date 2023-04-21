@@ -6,11 +6,20 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/20 09:46:44 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/21 11:15:34 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+void	msleep(int ms)
+{
+	unsigned long	start;
+
+	start = get_time();
+	while ((get_time() - start) < (unsigned long) ms)
+		usleep(100);
+}
 
 unsigned long	get_time(void)
 {
