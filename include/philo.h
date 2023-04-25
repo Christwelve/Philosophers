@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/24 17:54:04 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/25 17:38:13 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define THINK	3
 # define DEATH	4
 # define EATEN	5
+# define L_FORK	6
 
 typedef struct s_data	t_data;
 
@@ -53,7 +54,7 @@ typedef struct s_data
 	unsigned long	t_to_sleep;
 	unsigned long	t_start;
 	unsigned int	dead;
-	pthread_t		death_thread;
+	// pthread_t		death_thread;
 	t_philo			*philo;
 
 }	t_data;

@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/21 11:15:34 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/25 17:24:44 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	print(int in, t_philo *philo)
 		printf("%lu	Philo %u has taken a fork\n",
 			(get_time() - philo->data->t_start), philo->id);
 	if (in == EAT)
-		printf("%lu	Philo %u has eaten\n",
+		printf("%lu	Philo %u is eating\n",
 			(get_time() - philo->data->t_start), philo->id);
 	if (in == SLEEP)
 		printf("%lu	Philo %u is sleeping\n",
@@ -45,5 +45,8 @@ void	print(int in, t_philo *philo)
 			(get_time() - philo->data->t_start), philo->id);
 	if (in == DEATH)
 		printf("%lu	Philo %u died\n",
+			(get_time() - philo->data->t_start), philo->id);
+	if (in == L_FORK)
+		printf("%lu	Philo %u has taken a left fork\n",
 			(get_time() - philo->data->t_start), philo->id);
 }

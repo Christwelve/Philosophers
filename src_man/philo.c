@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:09 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/24 20:36:12 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/25 18:03:55 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,30 @@ int	philo_saturated(t_philo *philo)
 	return (0);
 }
 
-int	is_philo_dead(t_data *data, int i)
+int	is_philo_dead(t_philo *philo, int i)
 {
-	if (((get_time() - data->philo[i].t_last_eat)) > data->t_to_die)
+	if (((get_time() - philo[i].t_last_eat)) > philo->data->t_to_die)
 		return (1);
 	return (0);
 }
 
-// void	*survival_monitor(t_philo *philo)
-// {
-// 	unsigned int	i;
+void	*survival_loop(void *arg)
+{
+	t_philo			*philo;
+	unsigned int	i;
 
-// 	i = 0;
-// 	while (i < philo->data->nbr_philos)
-// 	{
-// 		if (get_time() - philo[i].t_last_eat > philo->data->t_to_eat)
-// 		{
-// 			print(DEATH, philo);
-// 			philo->data->dead = 1;
-// 		}
-// 		i++;
-// 	}
-// 	return (NULL);
-// }
+	philo = arg;
+	i = 0;
+	while ((i < philo->data->nbr_philos) && !philo->data->dead)
+	{
+		if (is_philo_dead(philo, i))
+		{
+			print(DEATH, philo);
+			philo->data->dead = 1;
+		}
+	}
+	return (NULL);
+}
 
 
 void	*philo_loop(void *arg)
@@ -59,37 +60,23 @@ void	*philo_loop(void *arg)
 		print(THINK, philo);
 		msleep(5);
 	}
-	while (!philo_saturated(philo))
+	while (!philo_saturated(philo) && !philo->data->dead)
 	{
 		pthread_mutex_lock(&philo->fork);
 		print(FORK, philo);
 		pthread_mutex_lock(philo->l_fork);
-		print(FORK, philo);
+		print(L_FORK, philo);
 		print(EAT, philo);
 		philo->count_eat++;
 		philo->t_last_eat = get_time();
-		usleep(philo->data->t_to_eat * 1000);
-		pthread_mutex_unlock(philo->l_fork);
+		msleep(philo->data->t_to_eat);
 		pthread_mutex_unlock(&philo->fork);
+		pthread_mutex_unlock(philo->l_fork);
 		print(SLEEP, philo);
-		usleep(philo->data->t_to_sleep * 1000);
+		msleep(philo->data->t_to_sleep);
 		print(THINK, philo);
 	}
 	return (NULL);
-}
-
-int	join_threads(t_data *data)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < data->nbr_philos)
-	{
-		if (pthread_join(&data->philo->thread[i], NULL))
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 int	create_threads(t_data *data)
@@ -104,8 +91,22 @@ int	create_threads(t_data *data)
 			return (1);
 		i++;
 	}
-	// if (pthread_create(&data->death_thread, NULL, &survival_monitor, &data->death_thread))
-	// 	return (1);
+	if (pthread_create(&data->philo->thread, NULL, &survival_loop, data->philo))
+		return (1);
+	return (0);
+}
+
+int	join_threads(t_data *data)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < data->nbr_philos)
+	{
+		if (pthread_join(&data->philo->thread[i], NULL))
+			return (1);
+		i++;
+	}
 	return (0);
 }
 
@@ -123,14 +124,15 @@ int	set_philo(t_data *data)
 		data->philo[i].count_eat = 0;
 		data->philo[i].thread = 0;
 		data->philo[i].data = data;
-		// data->philo[i].dead = 0;
-		if (pthread_mutex_init(&data->philo->fork, NULL))
+		data->philo[i].t_last_eat = get_time();
+		if (pthread_mutex_init(&data->philo[i].fork, NULL))
 			return (1);
 		if (i > 0)
 			data->philo[i].l_fork = &data->philo[i - 1].fork;
 		i++;
 	}
-	data->philo[0].l_fork = &data->philo[i].fork;
+	data->philo[0].l_fork = &data->philo[i - 1].fork;
+	// printf("last fork: %i\n", data->nbr_philos);
 	return (0);
 }
 
