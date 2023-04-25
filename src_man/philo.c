@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:09 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/25 18:03:55 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/25 21:57:13 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,16 @@ void	*survival_loop(void *arg)
 
 	philo = arg;
 	i = 0;
-	while ((i < philo->data->nbr_philos) && !philo->data->dead)
+	while (!philo->data->dead)
 	{
 		if (is_philo_dead(philo, i))
 		{
 			print(DEATH, philo);
 			philo->data->dead = 1;
 		}
+		i++;
+		if (i == philo->data->nbr_philos - 1)
+			i = 0;
 	}
 	return (NULL);
 }
@@ -91,7 +94,9 @@ int	create_threads(t_data *data)
 			return (1);
 		i++;
 	}
-	if (pthread_create(&data->philo->thread, NULL, &survival_loop, data->philo))
+	// if (pthread_create(&data->philo->thread, NULL, &survival_loop, data->philo))
+		// return (1);
+	if (pthread_create(&data->death_thread, NULL, &survival_loop, data->philo))
 		return (1);
 	return (0);
 }
@@ -103,10 +108,16 @@ int	join_threads(t_data *data)
 	i = 0;
 	while (i < data->nbr_philos)
 	{
-		if (pthread_join(&data->philo->thread[i], NULL))
+		if (pthread_detach(data->philo[i].thread))
 			return (1);
+		// if (pthread_join(data->philo[i].thread, NULL))
+		// 	return (1);
 		i++;
 	}
+	// if (pthread_detach(data->death_thread))
+	// 	return (1);
+	if (pthread_join(data->death_thread, NULL))
+		return (1);
 	return (0);
 }
 
@@ -120,7 +131,7 @@ int	set_philo(t_data *data)
 		return (1);
 	while (i < data->nbr_philos)
 	{
-		data->philo[i].id = i;
+		data->philo[i].id = i + 1;
 		data->philo[i].count_eat = 0;
 		data->philo[i].thread = 0;
 		data->philo[i].data = data;
@@ -132,7 +143,6 @@ int	set_philo(t_data *data)
 		i++;
 	}
 	data->philo[0].l_fork = &data->philo[i - 1].fork;
-	// printf("last fork: %i\n", data->nbr_philos);
 	return (0);
 }
 
@@ -150,6 +160,13 @@ int	set_data(int argc, char **argv, t_data *data)
 	return (0);
 }
 
+// void	free_all(t_data *data)
+// {
+// 	pthread_mutex_destroy(&data->philo->fork);
+// 	pthread_mutex_destroy(data->philo->l_fork);
+// 	free(data->philo);
+// }
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -164,6 +181,9 @@ int	main(int argc, char **argv)
 		return (printf("%s\n", RED "Creating threads failed!" CLEAR), 4);
 	if (join_threads(&data))
 		return (printf("%s\n", RED "Joining threads failed!" CLEAR), 5);
+	// free_all(&data);
+	pthread_mutex_destroy(&data.philo->fork);
+	pthread_mutex_destroy(data.philo->l_fork);
 	free(data.philo);
 	return (0);
 }

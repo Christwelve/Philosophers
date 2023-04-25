@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/25 17:38:13 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/25 19:09:02 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ typedef struct s_data
 	unsigned long	t_to_sleep;
 	unsigned long	t_start;
 	unsigned int	dead;
-	// pthread_t		death_thread;
+	pthread_t		death_thread;
 	t_philo			*philo;
 
 }	t_data;
