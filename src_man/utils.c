@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/25 17:24:44 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/26 18:11:29 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ unsigned long	get_time(void)
 
 void	print(int in, t_philo *philo)
 {
+	int	tmp;
+
+	pthread_mutex_lock(&philo->data->lock_print);
+	pthread_mutex_lock(&philo->data->lock_dead);
+	tmp = philo->data->dead;
+	pthread_mutex_unlock(&philo->data->lock_dead);
+	if (tmp)
+		return ;
 	if (in == FORK)
 		printf("%lu	Philo %u has taken a fork\n",
 			(get_time() - philo->data->t_start), philo->id);
@@ -46,7 +54,5 @@ void	print(int in, t_philo *philo)
 	if (in == DEATH)
 		printf("%lu	Philo %u died\n",
 			(get_time() - philo->data->t_start), philo->id);
-	if (in == L_FORK)
-		printf("%lu	Philo %u has taken a left fork\n",
-			(get_time() - philo->data->t_start), philo->id);
+	pthread_mutex_unlock(&philo->data->lock_print);
 }

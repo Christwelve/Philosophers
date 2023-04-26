@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/26 16:20:59 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/26 18:09:17 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 # define THINK	3
 # define DEATH	4
 # define EATEN	5
-# define L_FORK	6
 
 typedef struct s_data	t_data;
 
@@ -38,8 +37,8 @@ typedef struct s_philo
 	pthread_t		thread;
 	unsigned int	id;
 	unsigned int	count_eat;
-	pthread_mutex_t	lock_count_eat;
 	unsigned long	t_last_eat;
+	pthread_mutex_t	lock_count_eat;
 	pthread_mutex_t	lock_last_eat;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*l_fork;
@@ -58,6 +57,7 @@ typedef struct s_data
 	unsigned long	t_start;
 	unsigned int	dead;
 	pthread_mutex_t	lock_dead;
+	pthread_mutex_t	lock_print;
 	pthread_t		death_thread;
 	t_philo			*philo;
 
