@@ -5,7 +5,7 @@ CC			= 	cc
 RM			=	rm -rf
 INCLUDE 	= 	-I include
 
-MAN_FILES	=	src_man/philo.c src_man/check_input.c src_man/utils.c
+MAN_FILES	=	src_man/philo.c src_man/check_input.c src_man/utils.c src_man/loops.c src_man/threads.c src_man/set.c
 # BONUS_FILES	=	src_bonus/philo_bonus.c
 
 MAN_OBJ		=	$(MAN_FILES:.c=.o)

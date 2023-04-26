@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/26 18:11:29 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/26 22:12:33 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,17 @@ unsigned long	get_time(void)
 	return ((time.tv_sec * 1000) + time.tv_usec / 1000);
 }
 
+void	free_all(t_data *data)
+{
+	pthread_mutex_destroy(&data->lock_dead);
+	pthread_mutex_destroy(&data->lock_print);
+	pthread_mutex_destroy(&data->philo->lock_count_eat);
+	pthread_mutex_destroy(&data->philo->lock_last_eat);
+	pthread_mutex_destroy(&data->philo->fork);
+	pthread_mutex_destroy(data->philo->l_fork);
+	free(data->philo);
+}
+
 void	print(int in, t_philo *philo)
 {
 	int	tmp;
@@ -37,22 +48,23 @@ void	print(int in, t_philo *philo)
 	pthread_mutex_lock(&philo->data->lock_dead);
 	tmp = philo->data->dead;
 	pthread_mutex_unlock(&philo->data->lock_dead);
-	if (tmp)
-		return ;
-	if (in == FORK)
-		printf("%lu	Philo %u has taken a fork\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == EAT)
-		printf("%lu	Philo %u is eating\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == SLEEP)
-		printf("%lu	Philo %u is sleeping\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == THINK)
-		printf("%lu	Philo %u is thinking\n",
-			(get_time() - philo->data->t_start), philo->id);
-	if (in == DEATH)
-		printf("%lu	Philo %u died\n",
-			(get_time() - philo->data->t_start), philo->id);
+	if (!tmp)
+	{
+		if (in == FORK)
+			printf("%lu	Philo %u has taken a fork\n",
+				(get_time() - philo->data->t_start), philo->id);
+		if (in == EAT)
+			printf("%lu	Philo %u is eating\n",
+				(get_time() - philo->data->t_start), philo->id);
+		if (in == SLEEP)
+			printf("%lu	Philo %u is sleeping\n",
+				(get_time() - philo->data->t_start), philo->id);
+		if (in == THINK)
+			printf("%lu	Philo %u is thinking\n",
+				(get_time() - philo->data->t_start), philo->id);
+		if (in == DEATH)
+			printf("%lu	Philo %u died\n",
+				(get_time() - philo->data->t_start), philo->id);
+	}
 	pthread_mutex_unlock(&philo->data->lock_print);
 }
