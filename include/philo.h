@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/25 19:09:02 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/26 16:20:59 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,15 @@ typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
+	pthread_t		thread;
 	unsigned int	id;
 	unsigned int	count_eat;
+	pthread_mutex_t	lock_count_eat;
 	unsigned long	t_last_eat;
-	pthread_t		thread;
+	pthread_mutex_t	lock_last_eat;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	*l_fork;
+
 	t_data			*data;
 
 }	t_philo;
@@ -54,6 +57,7 @@ typedef struct s_data
 	unsigned long	t_to_sleep;
 	unsigned long	t_start;
 	unsigned int	dead;
+	pthread_mutex_t	lock_dead;
 	pthread_t		death_thread;
 	t_philo			*philo;
 
