@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/26 22:17:42 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/27 06:18:29 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,25 +65,26 @@ typedef struct s_data
 
 /*
   ┌─────────────────────────────────────────────────────────────────────────┐
-  │ Utils                                                                   │
+  │Functions	                                                            │
   └─────────────────────────────────────────────────────────────────────────┘
  */
 
 int				check_input(int argc, char **argv);
 long			ft_atol(const char *str);
 
-unsigned long	get_time(void);
-void			msleep(int ms);
-void			free_all(t_data *data);
-void			print(int in, t_philo *philo);
-
-void			*philo_loop(void *arg);
-void			*survival_loop(void *arg);
+int				set_data(int argc, char **argv, t_data *data);
+int				set_philo(t_data *data);
 
 int				create_threads(t_data *data);
 int				join_threads(t_data *data);
 
-int				set_philo(t_data *data);
-int				set_data(int argc, char **argv, t_data *data);
+void			*philo_loop(void *arg);
+void			*survival_loop(void *arg);
+
+unsigned long	get_time(void);
+void			msleep(int ms);
+void			free_data(t_data *data);
+void			free_all(t_data *data);
+void			print(int in, t_philo *philo);
 
 #endif

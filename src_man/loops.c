@@ -6,11 +6,22 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/26 22:11:56 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/27 05:56:28 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+static unsigned int	check_dead(t_philo *philo)
+{
+	unsigned int	tmp;
+
+	tmp = 0;
+	pthread_mutex_lock(&philo->data->lock_dead);
+	tmp = philo->data->dead;
+	pthread_mutex_unlock(&philo->data->lock_dead);
+	return (tmp);
+}
 
 static int	philo_saturated(t_philo *philo)
 {
@@ -53,9 +64,7 @@ static void	philo_tasks(t_philo *philo)
 		print(SLEEP, philo);
 		msleep(philo->data->t_to_sleep);
 		print(THINK, philo);
-		pthread_mutex_lock(&philo->data->lock_dead);
-		tmp = philo->data->dead;
-		pthread_mutex_unlock(&philo->data->lock_dead);
+		tmp = check_dead(philo);
 	}
 }
 

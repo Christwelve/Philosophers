@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/26 22:12:33 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/27 06:12:39 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ unsigned long	get_time(void)
 
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + time.tv_usec / 1000);
+}
+
+void	free_data(t_data *data)
+{
+	pthread_mutex_destroy(&data->lock_dead);
+	pthread_mutex_destroy(&data->lock_print);
 }
 
 void	free_all(t_data *data)

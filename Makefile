@@ -1,6 +1,6 @@
 PHILO		= 	philo
 # PHILO_BONUS	=	philo_bonus
-CFLAGS		= 	-Wall -Werror -Wextra -g #-fsanitize=thread
+CFLAGS		= 	-Wall -Werror -Wextra #-g #-fsanitize=thread
 CC			= 	cc
 RM			=	rm -rf
 INCLUDE 	= 	-I include
