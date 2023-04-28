@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/28 09:45:56 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/28 14:53:42 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	*philo_loop(void *arg)
 	if (philo->id % 2 == 0)
 	{
 		msleep(philo->data->t_to_sleep);
-		while (!philo_saturated(philo) && !check_dead(philo))
+		while (!philo_saturated(philo) && !philo->data->dead)
 		{
 			eat_loop(philo, 0);
 			print(SLEEP, philo);
@@ -84,12 +84,15 @@ void	*philo_loop(void *arg)
 			print(THINK, philo);
 		}
 	}
-	while (!philo_saturated(philo) && !check_dead(philo))
+	else
 	{
-		eat_loop(philo, 1);
-		print(SLEEP, philo);
-		msleep(philo->data->t_to_sleep);
-		print(THINK, philo);
+		while (!philo_saturated(philo) && !philo->data->dead)
+		{
+			eat_loop(philo, 1);
+			print(SLEEP, philo);
+			msleep(philo->data->t_to_sleep);
+			print(THINK, philo);
+		}
 	}
 	return (NULL);
 }
@@ -103,12 +106,13 @@ void	*survival_loop(void *arg)
 	philo = arg;
 	i = 0;
 	tmp = 0;
-	while (!tmp)
+	// while (!tmp)
+	while (!check_dead(philo))
 	{
 		pthread_mutex_lock(&philo->lock_last_eat);
 		if ((get_time() - philo[i].t_last_eat) > philo->data->t_to_die)
 		{
-			print(DEATH, philo);
+			print(DEATH, &philo[i]);
 			pthread_mutex_lock(&philo->data->lock_dead);
 			philo->data->dead = 1;
 			pthread_mutex_unlock(&philo->data->lock_dead);
@@ -116,9 +120,9 @@ void	*survival_loop(void *arg)
 		pthread_mutex_unlock(&philo->lock_last_eat);
 		if (++i == philo->data->nbr_philos - 1)
 			i = 0;
-		pthread_mutex_lock(&philo->data->lock_dead);
-		tmp = philo->data->dead;
-		pthread_mutex_unlock(&philo->data->lock_dead);
+		// pthread_mutex_lock(&philo->data->lock_dead);
+		// tmp = philo->data->dead;
+		// pthread_mutex_unlock(&philo->data->lock_dead);
 	}
 	return (NULL);
 }
