@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/27 05:56:28 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/28 09:45:56 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,32 @@ static int	philo_saturated(t_philo *philo)
 	return (0);
 }
 
-static void	philo_tasks(t_philo *philo)
+void	eat_loop(t_philo *philo, int odd)
 {
-	unsigned int	tmp;
-
-	tmp = 0;
-	while (!philo_saturated(philo) && !tmp)
+	if (odd)
 	{
 		pthread_mutex_lock(&philo->fork);
 		print(FORK, philo);
 		pthread_mutex_lock(philo->l_fork);
 		print(FORK, philo);
-		print(EAT, philo);
-		pthread_mutex_lock(&philo->lock_count_eat);
-		philo->count_eat++;
-		pthread_mutex_unlock(&philo->lock_count_eat);
-		pthread_mutex_lock(&philo->lock_last_eat);
-		philo->t_last_eat = get_time();
-		pthread_mutex_unlock(&philo->lock_last_eat);
-		msleep(philo->data->t_to_eat);
-		pthread_mutex_unlock(&philo->fork);
-		pthread_mutex_unlock(philo->l_fork);
-		print(SLEEP, philo);
-		msleep(philo->data->t_to_sleep);
-		print(THINK, philo);
-		tmp = check_dead(philo);
 	}
+	else
+	{
+		pthread_mutex_lock(philo->l_fork);
+		print(FORK, philo);
+		pthread_mutex_lock(&philo->fork);
+		print(FORK, philo);
+	}
+	print(EAT, philo);
+	pthread_mutex_lock(&philo->lock_count_eat);
+	philo->count_eat++;
+	pthread_mutex_unlock(&philo->lock_count_eat);
+	pthread_mutex_lock(&philo->lock_last_eat);
+	philo->t_last_eat = get_time();
+	pthread_mutex_unlock(&philo->lock_last_eat);
+	msleep(philo->data->t_to_eat);
+	pthread_mutex_unlock(&philo->fork);
+	pthread_mutex_unlock(philo->l_fork);
 }
 
 void	*philo_loop(void *arg)
@@ -75,10 +75,22 @@ void	*philo_loop(void *arg)
 	philo = arg;
 	if (philo->id % 2 == 0)
 	{
-		print(THINK, philo);
-		msleep(5);
+		msleep(philo->data->t_to_sleep);
+		while (!philo_saturated(philo) && !check_dead(philo))
+		{
+			eat_loop(philo, 0);
+			print(SLEEP, philo);
+			msleep(philo->data->t_to_sleep);
+			print(THINK, philo);
+		}
 	}
-	philo_tasks(philo);
+	while (!philo_saturated(philo) && !check_dead(philo))
+	{
+		eat_loop(philo, 1);
+		print(SLEEP, philo);
+		msleep(philo->data->t_to_sleep);
+		print(THINK, philo);
+	}
 	return (NULL);
 }
 
