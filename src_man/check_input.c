@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/13 14:52:51 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/20 09:43:55 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/04/28 09:21:33 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,10 @@ static int	is_num(char *argv)
 int	check_input(int argc, char **argv)
 {
 	if (argc < 5 || argc > 6)
+		return (1);
+	if (atol(argv[1]) == 0)
+		return (1);
+	if (argv[5] && atol(argv[5]) == 0)
 		return (1);
 	while (*(++argv) != NULL)
 	{
