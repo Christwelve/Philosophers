@@ -6,13 +6,13 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/01 14:33:33 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/01 16:45:25 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static unsigned int	check_dead(t_philo *philo)
+unsigned int	check_dead(t_philo *philo)
 {
 	unsigned int	tmp;
 
@@ -40,7 +40,7 @@ static int	philo_saturated(t_philo *philo)
 	return (0);
 }
 
-void	eat_loop(t_philo *philo, int odd)
+static void	eat_loop(t_philo *philo, int odd)
 {
 	if (odd)
 	{
@@ -63,7 +63,7 @@ void	eat_loop(t_philo *philo, int odd)
 	pthread_mutex_lock(&philo->lock_last_eat);
 	philo->t_last_eat = get_time();
 	pthread_mutex_unlock(&philo->lock_last_eat);
-	msleep(philo->data->t_to_eat);
+	msleep(philo->data->t_to_eat, philo);
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->l_fork);
 }
@@ -75,22 +75,22 @@ void	*philo_loop(void *arg)
 	philo = arg;
 	if (philo->id % 2 == 0)
 	{
-		msleep(philo->data->t_to_sleep);
-		while (!philo_saturated(philo) && !philo->data->dead)
+		msleep(philo->data->t_to_sleep, philo);
+		while (!philo_saturated(philo) && !check_dead(philo))
 		{
 			eat_loop(philo, 0);
 			print(SLEEP, philo);
-			msleep(philo->data->t_to_sleep);
+			msleep(philo->data->t_to_sleep, philo);
 			print(THINK, philo);
 		}
 	}
 	else
 	{
-		while (!philo_saturated(philo) && !philo->data->dead)
+		while (!philo_saturated(philo) && !check_dead(philo))
 		{
 			eat_loop(philo, 1);
 			print(SLEEP, philo);
-			msleep(philo->data->t_to_sleep);
+			msleep(philo->data->t_to_sleep, philo);
 			print(THINK, philo);
 		}
 	}

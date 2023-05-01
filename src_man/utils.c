@@ -6,18 +6,18 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/27 06:12:39 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/01 16:44:08 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	msleep(int ms)
+void	msleep(int ms, t_philo *philo)
 {
 	unsigned long	start;
 
 	start = get_time();
-	while ((get_time() - start) < (unsigned long) ms)
+	while (((get_time() - start) < (unsigned long) ms) && !check_dead(philo))
 		usleep(100);
 }
 
@@ -48,13 +48,8 @@ void	free_all(t_data *data)
 
 void	print(int in, t_philo *philo)
 {
-	int	tmp;
-
 	pthread_mutex_lock(&philo->data->lock_print);
-	pthread_mutex_lock(&philo->data->lock_dead);
-	tmp = philo->data->dead;
-	pthread_mutex_unlock(&philo->data->lock_dead);
-	if (!tmp)
+	if (!check_dead(philo))
 	{
 		if (in == FORK)
 			printf("%lu	Philo %u has taken a fork\n",
