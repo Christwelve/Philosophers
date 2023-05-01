@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/01 16:44:08 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/01 19:07:15 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ unsigned long	get_time(void)
 
 void	free_data(t_data *data)
 {
+	pthread_mutex_destroy(&data->lock_time);
 	pthread_mutex_destroy(&data->lock_dead);
 	pthread_mutex_destroy(&data->lock_print);
 }
 
 void	free_all(t_data *data)
 {
+	pthread_mutex_destroy(&data->lock_time);
 	pthread_mutex_destroy(&data->lock_dead);
 	pthread_mutex_destroy(&data->lock_print);
 	pthread_mutex_destroy(&data->philo->lock_count_eat);

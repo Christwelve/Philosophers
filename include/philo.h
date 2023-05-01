@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/01 16:44:41 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/01 19:38:04 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_data
 	unsigned long	t_to_sleep;
 	unsigned long	t_start;
 	unsigned int	dead;
+	pthread_mutex_t	lock_time;
 	pthread_mutex_t	lock_dead;
 	pthread_mutex_t	lock_print;
 	pthread_t		death_thread;
@@ -65,7 +66,7 @@ typedef struct s_data
 
 /*
   ┌─────────────────────────────────────────────────────────────────────────┐
-  │Functions	                                                            │
+  │Parser		                                                            │
   └─────────────────────────────────────────────────────────────────────────┘
  */
 
@@ -75,12 +76,28 @@ long			ft_atol(const char *str);
 int				set_data(int argc, char **argv, t_data *data);
 int				set_philo(t_data *data);
 
+/*
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │Functions	                                                            │
+  └─────────────────────────────────────────────────────────────────────────┘
+ */
+
 int				create_threads(t_data *data);
 int				join_threads(t_data *data);
 
-unsigned int	check_dead(t_philo *philo);
 void			*philo_loop(void *arg);
 void			*survival_loop(void *arg);
+
+/*
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │Utils		                                                            │
+  └─────────────────────────────────────────────────────────────────────────┘
+ */
+
+unsigned int	check_dead(t_philo *philo);
+int				philo_saturated(t_philo *philo);
+void			last_eat_loop(t_philo *philo);
+void			eat_loop(t_philo *philo, int odd);
 
 unsigned long	get_time(void);
 void			msleep(int ms, t_philo *philo);

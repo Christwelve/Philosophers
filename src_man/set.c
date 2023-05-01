@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:16:30 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/26 22:25:18 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/01 18:50:10 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	set_data(int argc, char **argv, t_data *data)
 		data->nbr_must_eat = ft_atol(argv[5]);
 	else
 		data->nbr_must_eat = 0;
+	if (pthread_mutex_init(&data->lock_time, NULL))
+		return (1);
 	if (pthread_mutex_init(&data->lock_dead, NULL))
 		return (1);
 	if (pthread_mutex_init(&data->lock_print, NULL))
