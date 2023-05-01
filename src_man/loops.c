@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/04/28 14:53:42 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/01 14:33:33 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,9 @@ void	*survival_loop(void *arg)
 {
 	t_philo			*philo;
 	unsigned int	i;
-	unsigned int	tmp;
 
 	philo = arg;
 	i = 0;
-	tmp = 0;
-	// while (!tmp)
 	while (!check_dead(philo))
 	{
 		pthread_mutex_lock(&philo->lock_last_eat);
@@ -120,9 +117,6 @@ void	*survival_loop(void *arg)
 		pthread_mutex_unlock(&philo->lock_last_eat);
 		if (++i == philo->data->nbr_philos - 1)
 			i = 0;
-		// pthread_mutex_lock(&philo->data->lock_dead);
-		// tmp = philo->data->dead;
-		// pthread_mutex_unlock(&philo->data->lock_dead);
 	}
 	return (NULL);
 }
