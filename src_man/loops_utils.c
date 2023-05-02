@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 19:11:43 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/02 08:16:04 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/02 13:29:31 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,28 +67,34 @@ void	last_eat_loop(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->lock_time);
 }
 
-void	eat_loop(t_philo *philo, int odd)
+void	eat_loop(t_philo *philo)
 {
-	if (odd)
+	if (philo->id % 2)
 	{
-		pthread_mutex_lock(&philo->fork);
-		print(FORK, philo);
 		pthread_mutex_lock(philo->l_fork);
+		print(FORK, philo);
+		pthread_mutex_lock(&philo->fork);
 		print(FORK, philo);
 	}
 	else
 	{
-		pthread_mutex_lock(philo->l_fork);
-		print(FORK, philo);
 		pthread_mutex_lock(&philo->fork);
 		print(FORK, philo);
+		pthread_mutex_lock(philo->l_fork);
+		print(FORK, philo);
 	}
+	last_eat_loop(philo);
 	print(EAT, philo);
 	pthread_mutex_lock(&philo->lock_count_eat);
 	philo->count_eat++;
 	pthread_mutex_unlock(&philo->lock_count_eat);
-	last_eat_loop(philo);
+	pthread_mutex_lock(&philo->lock_is_eating);
+	philo->is_eating = 1;
+	pthread_mutex_unlock(&philo->lock_is_eating);
 	msleep(philo->data->t_to_eat, philo);
+	pthread_mutex_lock(&philo->lock_is_eating);
+	philo->is_eating = 0;
+	pthread_mutex_unlock(&philo->lock_is_eating);
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->l_fork);
 }
