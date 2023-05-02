@@ -6,58 +6,56 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/01 19:55:40 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/02 08:21:41 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+static void	loop_1(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->fork);
+	print(FORK, philo);
+	last_eat_loop(philo);
+	msleep(philo->data->t_to_eat, philo);
+	pthread_mutex_unlock(&philo->fork);
+}
+
+static void	loop_even(t_philo *philo)
+{
+	msleep(philo->data->t_to_sleep, philo);
+	while (!philo_saturated(philo) && !check_dead(philo))
+	{
+		eat_loop(philo, 0);
+		print(SLEEP, philo);
+		msleep(philo->data->t_to_sleep, philo);
+		print(THINK, philo);
+	}
+}
+
+static void	loop_odd(t_philo *philo)
+{
+	while (!philo_saturated(philo) && !check_dead(philo))
+	{
+		eat_loop(philo, 1);
+		print(SLEEP, philo);
+		msleep(philo->data->t_to_sleep, philo);
+		print(THINK, philo);
+	}
+}
 
 void	*philo_loop(void *arg)
 {
 	t_philo			*philo;
 
 	philo = arg;
-	if (philo->id % 2 == 0)
-	{
-		msleep(philo->data->t_to_sleep, philo);
-		while (!philo_saturated(philo) && !check_dead(philo))
-		{
-			eat_loop(philo, 0);
-			print(SLEEP, philo);
-			msleep(philo->data->t_to_sleep, philo);
-			print(THINK, philo);
-		}
-	}
+	if (philo->data->nbr_philos == 1)
+		loop_1(philo);
+	else if (philo->id % 2 == 0)
+		loop_even(philo);
 	else
-	{
-		while (!philo_saturated(philo) && !check_dead(philo))
-		{
-			eat_loop(philo, 1);
-			print(SLEEP, philo);
-			msleep(philo->data->t_to_sleep, philo);
-			print(THINK, philo);
-		}
-	}
+		loop_odd(philo);
 	return (NULL);
-}
-
-static int	all_philos_saturated(t_philo *philo)
-{
-	unsigned int	i;
-	unsigned int	res;
-
-	i = 0;
-	res = 0;
-
-	while (i < philo->data->nbr_philos)
-	{
-		if (philo_saturated(&philo[i]))
-			res++;
-		i++;
-	}
-	if (res == philo->data->nbr_philos)
-		return (1);
-	return (0);
 }
 
 void	*survival_loop(void *arg)
@@ -80,7 +78,7 @@ void	*survival_loop(void *arg)
 		}
 		pthread_mutex_unlock(&philo->lock_last_eat);
 		pthread_mutex_unlock(&philo->data->lock_time);
-		if (++i == philo->data->nbr_philos - 1)
+		if (++i >= philo->data->nbr_philos - 1)
 			i = 0;
 	}
 	return (NULL);

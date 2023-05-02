@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loop_utils.c                                       :+:      :+:    :+:   */
+/*   loops_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 19:11:43 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/01 19:12:56 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/02 08:16:04 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ int	philo_saturated(t_philo *philo)
 		else
 			return (1);
 	}
+	return (0);
+}
+
+int	all_philos_saturated(t_philo *philo)
+{
+	unsigned int	i;
+	unsigned int	res;
+
+	i = 0;
+	res = 0;
+	while (i < philo->data->nbr_philos)
+	{
+		if (philo_saturated(&philo[i]))
+			res++;
+		i++;
+	}
+	if (res == philo->data->nbr_philos)
+		return (1);
 	return (0);
 }
 
