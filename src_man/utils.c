@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 09:45:19 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/01 20:21:44 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/02 09:25:49 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ void	free_all(t_data *data)
 	pthread_mutex_destroy(&data->philo->lock_count_eat);
 	pthread_mutex_destroy(&data->philo->lock_last_eat);
 	pthread_mutex_destroy(&data->philo->fork);
-	pthread_mutex_destroy(data->philo->l_fork);
+	if (data->nbr_philos > 1)
+		pthread_mutex_destroy(data->philo->l_fork);
 	free(data->philo);
 }
 

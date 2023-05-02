@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/02 08:21:41 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/02 09:10:40 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	loop_1(t_philo *philo)
 
 static void	loop_even(t_philo *philo)
 {
-	msleep(philo->data->t_to_sleep, philo);
+	msleep(philo->data->t_to_eat, philo);
 	while (!philo_saturated(philo) && !check_dead(philo))
 	{
 		eat_loop(philo, 0);
