@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/01 20:04:48 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/03 08:09:09 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ typedef struct s_philo
 	unsigned int	id;
 	unsigned int	count_eat;
 	unsigned long	t_last_eat;
+	unsigned int	is_eating;
+	pthread_mutex_t	lock_is_eating;
 	pthread_mutex_t	lock_count_eat;
 	pthread_mutex_t	lock_last_eat;
 	pthread_mutex_t	fork;

@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 19:11:43 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/02 08:16:04 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/03 08:25:13 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,19 @@ void	eat_loop(t_philo *philo, int odd)
 		pthread_mutex_lock(&philo->fork);
 		print(FORK, philo);
 	}
+	pthread_mutex_lock(&philo->lock_is_eating);
+	philo->is_eating = 1;
+	pthread_mutex_unlock(&philo->lock_is_eating);
 	print(EAT, philo);
 	pthread_mutex_lock(&philo->lock_count_eat);
 	philo->count_eat++;
 	pthread_mutex_unlock(&philo->lock_count_eat);
 	last_eat_loop(philo);
 	msleep(philo->data->t_to_eat, philo);
+	// msleep(1, philo);
+	pthread_mutex_lock(&philo->lock_is_eating);
+	philo->is_eating = 0;
+	pthread_mutex_unlock(&philo->lock_is_eating);
 	pthread_mutex_unlock(&philo->fork);
 	pthread_mutex_unlock(philo->l_fork);
 }
