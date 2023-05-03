@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/03 08:27:27 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/03 17:06:00 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,18 @@ static void	loop_1(t_philo *philo)
 	pthread_mutex_unlock(&philo->fork);
 }
 
-static void	loop_even(t_philo *philo)
+static void	loop(t_philo *philo)
 {
-	msleep(philo->data->t_to_eat, philo);
+	if (philo->id % 2 == 0)
+		msleep(philo->data->t_to_eat, philo);
 	while (!philo_saturated(philo) && !check_dead(philo))
 	{
-		eat_loop(philo, 0);
+		eat_loop(philo);
 		print(SLEEP, philo);
 		msleep(philo->data->t_to_sleep, philo);
-		// msleep(1, philo);
+		msleep(1, philo);
 		print(THINK, philo);
-	}
-}
-
-static void	loop_odd(t_philo *philo)
-{
-	while (!philo_saturated(philo) && !check_dead(philo))
-	{
-		eat_loop(philo, 1);
-		print(SLEEP, philo);
-		msleep(philo->data->t_to_sleep, philo);
-		// msleep(1, philo);
-		print(THINK, philo);
+		msleep(1, philo);
 	}
 }
 
@@ -55,16 +45,19 @@ void	*philo_loop(void *arg)
 		loop_1(philo);
 	else if (philo->id % 2 == 0)
 	{
-		// msleep(1, philo);
-		loop_even(philo);
+		msleep(1, philo);
+		loop(philo);
 	}
-	// else if (philo->id % 3 == 0)
-	// {
-	// 	msleep(4, philo);
-	// 	loop_odd(philo);
-	// }
+	else if (philo->id % 3 == 0)
+	{
+		msleep(4, philo);
+		loop(philo);
+	}
 	else
-		loop_odd(philo);
+	{
+		msleep(1, philo);
+		loop(philo);
+	}
 	return (NULL);
 }
 

@@ -6,11 +6,24 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:16:30 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/03 08:11:31 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/03 17:02:37 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+static int	mutex_init(t_data *data, int i)
+{
+	if (pthread_mutex_init(&data->philo[i].lock_is_eating, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->philo[i].lock_count_eat, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->philo[i].lock_last_eat, NULL))
+		return (1);
+	if (pthread_mutex_init(&data->philo[i].fork, NULL))
+		return (1);
+	return (0);
+}
 
 int	set_philo(t_data *data)
 {
@@ -28,13 +41,7 @@ int	set_philo(t_data *data)
 		data->philo[i].data = data;
 		data->philo[i].t_last_eat = get_time();
 		data->philo[i].is_eating = 0;
-		if (pthread_mutex_init(&data->philo[i].lock_is_eating, NULL))
-			return (1);
-		if (pthread_mutex_init(&data->philo[i].lock_count_eat, NULL))
-			return (1);
-		if (pthread_mutex_init(&data->philo[i].lock_last_eat, NULL))
-			return (1);
-		if (pthread_mutex_init(&data->philo[i].fork, NULL))
+		if (mutex_init(data, i))
 			return (1);
 		if (i > 0)
 			data->philo[i].l_fork = &data->philo[i - 1].fork;

@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/03 08:09:09 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/03 13:31:22 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ unsigned int	check_dead(t_philo *philo);
 int				philo_saturated(t_philo *philo);
 int				all_philos_saturated(t_philo *philo);
 void			last_eat_loop(t_philo *philo);
-void			eat_loop(t_philo *philo, int odd);
+void			eat_loop(t_philo *philo);
 
 unsigned long	get_time(void);
 void			msleep(int ms, t_philo *philo);
