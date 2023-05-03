@@ -6,11 +6,43 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:05:01 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/02 13:30:07 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/02 09:10:40 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+static void	loop_1(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->fork);
+	print(FORK, philo);
+	last_eat_loop(philo);
+	msleep(philo->data->t_to_eat, philo);
+	pthread_mutex_unlock(&philo->fork);
+}
+
+static void	loop_even(t_philo *philo)
+{
+	msleep(philo->data->t_to_eat, philo);
+	while (!philo_saturated(philo) && !check_dead(philo))
+	{
+		eat_loop(philo, 0);
+		print(SLEEP, philo);
+		msleep(philo->data->t_to_sleep, philo);
+		print(THINK, philo);
+	}
+}
+
+static void	loop_odd(t_philo *philo)
+{
+	while (!philo_saturated(philo) && !check_dead(philo))
+	{
+		eat_loop(philo, 1);
+		print(SLEEP, philo);
+		msleep(philo->data->t_to_sleep, philo);
+		print(THINK, philo);
+	}
+}
 
 void	*philo_loop(void *arg)
 {
@@ -18,23 +50,11 @@ void	*philo_loop(void *arg)
 
 	philo = arg;
 	if (philo->data->nbr_philos == 1)
-	{
-		pthread_mutex_lock(&philo->fork);
-		print(FORK, philo);
-		last_eat_loop(philo);
-		msleep(philo->data->t_to_eat, philo);
-		pthread_mutex_unlock(&philo->fork);
-	}
+		loop_1(philo);
+	else if (philo->id % 2 == 0)
+		loop_even(philo);
 	else
-	{
-		while (!philo_saturated(philo) && !check_dead(philo))
-		{
-			eat_loop(philo);
-			print(SLEEP, philo);
-			msleep(philo->data->t_to_sleep, philo);
-			print(THINK, philo);
-		}
-	}
+		loop_odd(philo);
 	return (NULL);
 }
 
@@ -49,8 +69,7 @@ void	*survival_loop(void *arg)
 	{
 		pthread_mutex_lock(&philo->data->lock_time);
 		pthread_mutex_lock(&philo->lock_last_eat);
-		if (((get_time() - philo[i].t_last_eat) > philo->data->t_to_die)
-			&& !philo[i].is_eating)
+		if ((get_time() - philo[i].t_last_eat) > philo->data->t_to_die)
 		{
 			print(DEATH, &philo[i]);
 			pthread_mutex_lock(&philo->data->lock_dead);

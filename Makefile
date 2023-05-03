@@ -1,5 +1,5 @@
 PHILO		= 	philo
-CFLAGS		= 	-Wall -Werror -Wextra #-g -fsanitize=address
+CFLAGS		= 	-Wall -Werror -Wextra -g #-fsanitize=address
 CC			= 	cc
 RM			=	rm -rf
 INCLUDE 	= 	-I include

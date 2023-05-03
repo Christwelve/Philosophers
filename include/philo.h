@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:48:32 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/02 13:29:18 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/01 20:04:48 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ typedef struct s_philo
 	unsigned int	id;
 	unsigned int	count_eat;
 	unsigned long	t_last_eat;
-	unsigned int	is_eating;
-	pthread_mutex_t	lock_is_eating;
 	pthread_mutex_t	lock_count_eat;
 	pthread_mutex_t	lock_last_eat;
 	pthread_mutex_t	fork;
@@ -100,7 +98,7 @@ unsigned int	check_dead(t_philo *philo);
 int				philo_saturated(t_philo *philo);
 int				all_philos_saturated(t_philo *philo);
 void			last_eat_loop(t_philo *philo);
-void			eat_loop(t_philo *philo);
+void			eat_loop(t_philo *philo, int odd);
 
 unsigned long	get_time(void);
 void			msleep(int ms, t_philo *philo);

@@ -6,7 +6,7 @@
 /*   By: cmeng <cmeng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/26 22:16:30 by cmeng             #+#    #+#             */
-/*   Updated: 2023/05/02 13:29:21 by cmeng            ###   ########.fr       */
+/*   Updated: 2023/05/02 08:06:51 by cmeng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,9 @@ int	set_philo(t_data *data)
 		data->philo[i].thread = 0;
 		data->philo[i].data = data;
 		data->philo[i].t_last_eat = get_time();
-		data->philo[i].is_eating = 0;
-		if (pthread_mutex_init(&data->philo[i].lock_is_eating, NULL))
+		if (pthread_mutex_init(&data->philo->lock_count_eat, NULL))
 			return (1);
-		if (pthread_mutex_init(&data->philo[i].lock_count_eat, NULL))
-			return (1);
-		if (pthread_mutex_init(&data->philo[i].lock_last_eat, NULL))
+		if (pthread_mutex_init(&data->philo->lock_last_eat, NULL))
 			return (1);
 		if (pthread_mutex_init(&data->philo[i].fork, NULL))
 			return (1);
