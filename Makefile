@@ -2,7 +2,7 @@ PHILO		= 	philo
 CFLAGS		= 	-Wall -Werror -Wextra #-g #-fsanitize=address
 CC			= 	cc
 RM			=	rm -rf
-INCLUDE 	= 	-I include
+INCLUDE 	= 	-I include -lpthread
 
 MAN_FILES	=	src_man/philo.c src_man/check_input.c src_man/utils.c src_man/threads.c src_man/set.c \
 				src_man/loops.c src_man/loops_utils.c src_man/loops_actions.c
